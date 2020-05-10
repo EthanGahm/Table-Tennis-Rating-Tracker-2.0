@@ -44,8 +44,10 @@ function addPlayer(){
       return // if a button other than the OK button is pressed, runs return statement to exit the function entirely.
     }
   }
-  addPlayerToList(name, rating) // Once a valid name and rating have been collected, new player is created in the system by
+  
+  // ADD PLAYER TO SYSTEM
   newPlayerSheet(name, rating)  // adding the player to the player list and adding a new player sheet.
+  addPlayerToList(name, rating) // Once a valid name and rating have been collected, new player is created in the system by
 }
 
 // Checks if a certain string is a valid name for a new player.
@@ -69,6 +71,22 @@ function isValidInitialRating(text){
   return false
 }
 
+// Creates a new individual player profile sheet for a new player.
+// Copies the "Player Sheet Template" sheet.
+function newPlayerSheet(name, rating){
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
+  var template = ss.getSheetByName("Player Sheet Template")
+  var newSheet = ss.insertSheet(name, ss.getSheets().length, {template: template})
+  
+  // Fills in the name, rating, and matches played boxes on the new player sheet.\
+  // Rank box left unfilled for now. Will be filled in later by the addPlayerToList() function.
+  newSheet.getRange(1, 1).setValue(name)
+  newSheet.getRange(1, 3).setValue("Rating: " + rating)
+  newSheet.getRange(1, 6).setValue("Matches Played: " + 0) // Matches played set to zero since this is a new player.
+  
+  SpreadsheetApp.setActiveSheet(SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Match Recorder"))
+}
+
 // Adds a player name to the player list in the appropriate spot (sorted by rating).
 function addPlayerToList(name, rating){
   var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players")
@@ -87,9 +105,8 @@ function addPlayerToList(name, rating){
   playersSheet.getRange(rowNum, 2).setValue(name) // Add name to appropriate cell.
   playersSheet.getRange(rowNum, 3).setValue(rating) // Add rating to appropriate cell.
   updatePlayerRanks() // Re-writes the rank numbers for all players on the list to "fill in the gap" created by the new row.
-}
-
-function newPlayerSheet(name, rating){
+  
+  SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name).getRange(1, 5).setValue("Rank: " + (rowNum-1)) // Fills in the rank cell on the new player's player sheet.
 }
 
 // Fills in the leftmost column on the Players sheet with the appropriate rank numbers.
