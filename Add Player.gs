@@ -6,16 +6,17 @@ function addPlayer(){
   var button = ui.Button.OK
   
   // GET NAME
-  while (!isValidName(text) && button == ui.Button.OK) { // Continually prompts user for name until valid name is given.
+  while (!isValidNameToAdd(text) && button == ui.Button.OK) { // Continually prompts user for name until valid name is given.
     var result = ui.prompt( // Creates dialog box with text field that prompts user to enter a name.
       'Enter player name.',
+      '',
       ui.ButtonSet.OK_CANCEL)
     
     button = result.getSelectedButton() // The button the user presses.
     text = result.getResponseText() // The text the user enters.
     if (button == ui.Button.OK) {
       // User clicked "OK".
-      if (isValidName(text)) {
+      if (isValidNameToAdd(text)) {
         var name = text // If the name entered by the user is valid, name variable is set equal to the input.
       } else {
         ui.alert("Invalid name. Either the name field was left blank, or the player already exists.")
@@ -29,6 +30,7 @@ function addPlayer(){
   while (!isValidInitialRating(text) && button == ui.Button.OK) { // Continually prompts user for rating until valid initial rating is given.
     var result = ui.prompt( // Creates dialog box with text field that prompts user to enter a rating.
       'Enter initial player rating (default 100).',
+      '',
       ui.ButtonSet.OK_CANCEL)
     
     button = result.getSelectedButton() // The button the user presses.
@@ -38,7 +40,7 @@ function addPlayer(){
       if (isValidInitialRating(text)) {
         var rating = parseFloat(text) // If the value entered by the user is valid, rating variable is set equal to a cast version of the entered value
       } else {
-        ui.alert("Invalid name. Rating values must be numerical and greater than zero.")
+        ui.alert("Invalid rating. Rating values must be numerical and greater than zero.")
       }
     } else {
       return // if a button other than the OK button is pressed, runs return statement to exit the function entirely.
@@ -52,7 +54,7 @@ function addPlayer(){
 
 // Checks if a certain string is a valid name for a new player.
 // Must not appear in the existing list of players and must not be an empty string.
-function isValidName(text){
+function isValidNameToAdd(text){
   var playerList = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players").getRange("B2:B").getValues()) // An array of player names retrieved from the "Players" sheet
   if (text != "" && !playerList.includes(text)){
     return true
