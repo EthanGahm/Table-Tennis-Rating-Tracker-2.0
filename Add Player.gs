@@ -110,12 +110,3 @@ function addPlayerToList(name, rating){
   
   SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name).getRange(1, 5).setValue("Rank: " + (rowNum-1)) // Fills in the rank cell on the new player's player sheet.
 }
-
-// Fills in the leftmost column on the Players sheet with the appropriate rank numbers.
-function updatePlayerRanks(){
-  var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players")
-  var numRows = playersSheet.getMaxRows()
-  for (var i = 2; i <= numRows; i++){
-    playersSheet.getRange(i, 1).setValue(i-1)
-  }  
-}

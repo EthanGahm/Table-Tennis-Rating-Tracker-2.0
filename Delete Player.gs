@@ -26,17 +26,40 @@ function deletePlayer(){
     }
   }
     
-  var result = ui.alert(
+  var result = ui.alert( // Checks to make sure the user would really like to delete the player from the system.
     'Are you sure that you would like to delete ' + name + ' from the system?',
     'This action cannot be undone (without a little bit of annoying work for Ethan).',
     ui.ButtonSet.YES_NO);
   
-  if (result != ui.Button.YES) {
+  if (result != ui.Button.YES) { // If the user presses a button other than YES (either NO or the x in the top right), cancels operation.
     return
   } 
     
-    // ADD CODE HERE TO DELETE PLAYER
+  deletePlayerSheet(name)
+  deletePlayerFromList(name)
   
+}
+
+// Deletes the personal player profile sheet for a given player. 
+function deletePlayerSheet(name){
+  var personalPlayerSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name)
+  if (personalPlayerSheet){
+    SpreadsheetApp.getActiveSpreadsheet().deleteSheet(personalPlayerSheet) // Will only run this line, deleting the sheet, if the sheet exists (per the if statement).
+  }
+}
+
+// Removes a specified player's row from the players list.
+function deletePlayerFromList(name){
+  var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players")
+  var playerList = [].concat(...playersSheet.getRange("B2:B").getValues()) // An array of player ratings retrieved from the "Players" sheet.
+  for (var i = 0; i < playerList.length; i++){ // Iterates through rows in the "Players" sheet until the row is found that contains the players name.
+    if (playerList[i] == name){
+      playersSheet.deleteRow(i+2) // Deletes row.
+      break
+    }
+  }
+  
+  updatePlayerRanks() // Re-writes the rank numbers for all players on the list to "fill in the gap" created by deleting the old row.
 }
 
 // Checks if a certain string is a valid name for a new player.
