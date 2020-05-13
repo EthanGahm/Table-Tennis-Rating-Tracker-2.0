@@ -35,9 +35,9 @@ function deletePlayer(){
     return
   } 
     
-  deletePlayerSheet(name)
-  deletePlayerFromList(name)
-  
+  deletePlayerSheet(name) // Deletes the personal player sheet of the specified player.
+  deletePlayerFromList(name) // Removes the row containing the name and information of the specified player from the Active Players sheet.
+  updateActivePlayerNamesRange() // Ensures that the namedRange called ActivePlayerNames is up to date so that correct options display in drop down menus.
 }
 
 // Deletes the personal player profile sheet for a given player. 
@@ -50,9 +50,9 @@ function deletePlayerSheet(name){
 
 // Removes a specified player's row from the players list.
 function deletePlayerFromList(name){
-  var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players")
-  var playerList = [].concat(...playersSheet.getRange("B2:B").getValues()) // An array of player ratings retrieved from the "Players" sheet.
-  for (var i = 0; i < playerList.length; i++){ // Iterates through rows in the "Players" sheet until the row is found that contains the players name.
+  var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players")
+  var playerList = getActivePlayers() // An array of player ratings retrieved from the "Active Players" sheet.
+  for (var i = 0; i < playerList.length; i++){ // Iterates through rows in the "Active Players" sheet until the row is found that contains the players name.
     if (playerList[i] == name){
       playersSheet.deleteRow(i+2) // Deletes row.
       break
@@ -65,7 +65,7 @@ function deletePlayerFromList(name){
 // Checks if a certain string is a valid name for a new player.
 // Must appear in the existing list of players.
 function isValidNameToDelete(text){
-  var playerList = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players").getRange("B2:B").getValues()) // An array of player names retrieved from the "Players" sheet
+  var playerList = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players").getRange("B2:B").getValues()) // An array of player names retrieved from the "Active Players" sheet
   if (playerList.includes(text)){
     return true
   }

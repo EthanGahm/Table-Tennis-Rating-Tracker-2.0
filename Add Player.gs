@@ -48,14 +48,15 @@ function addPlayer(){
   }
   
   // ADD PLAYER TO SYSTEM
-  newPlayerSheet(name, rating)  // adding the player to the player list and adding a new player sheet.
-  addPlayerToList(name, rating) // Once a valid name and rating have been collected, new player is created in the system by
+  newPlayerSheet(name, rating)  // Once a valid name and rating have been collected, new player is created in the system by
+  addPlayerToList(name, rating) // adding the player to the player list and adding a new player sheet.
+  updateActivePlayerNamesRange() // Ensures that the namedRange called ActivePlayerNames is up to date so that correct options display in drop down menus.
 }
 
 // Checks if a certain string is a valid name for a new player.
 // Must not appear in the existing list of players and must not be an empty string.
 function isValidNameToAdd(text){
-  var playerList = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players").getRange("B2:B").getValues()) // An array of player names retrieved from the "Players" sheet
+  var playerList = getActivePlayers() // An array of player names retrieved from the "Active Players" sheet
   if (text != "" && !playerList.includes(text)){
     return true
   }
@@ -79,6 +80,7 @@ function newPlayerSheet(name, rating){
   var ss = SpreadsheetApp.getActiveSpreadsheet()
   var template = ss.getSheetByName("Player Sheet Template")
   var newSheet = ss.insertSheet(name, ss.getSheets().length, {template: template})
+  newSheet.showSheet() // Ensures that the new sheet is visible.
   
   // Fills in the name, rating, and matches played boxes on the new player sheet.\
   // Rank box left unfilled for now. Will be filled in later by the addPlayerToList() function.
@@ -91,19 +93,20 @@ function newPlayerSheet(name, rating){
 
 // Adds a player name to the player list in the appropriate spot (sorted by rating).
 function addPlayerToList(name, rating){
-  var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Players")
-  var ratingList = [].concat(...playersSheet.getRange("C2:C").getValues()) // An array of player ratings retrieved from the "Players" sheet.
+  var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players")
+  var ratingList = [].concat(...playersSheet.getRange("C2:C").getValues()) // An array of player ratings retrieved from the "Active Players" sheet.
   var rowNum = 0
   for (var i = 0; i < ratingList.length; i++) {
     if (rating > ratingList[i]){
-      var rowNum = i + 2 // Because the players start being listed on row number 2, but the list indexes from zero, add 2 to get row number.
+      var rowNum = i + 2 // Because the players start being listed on row number 3, but the list indexes from 0, add 3 to get row number.
+      playersSheet.insertRowBefore(rowNum) // Create new row for the player.
       break
     }
   }
   if (rowNum == 0) { // If the player is the lowest rated player on the list so far, add at bottom.
     var rowNum = ratingList.length + 2
+    playersSheet.insertRowAfter(rowNum-1) // Create new row for the player.
   }
-  playersSheet.insertRowAfter(rowNum-1) // Create new row for the player.
   playersSheet.getRange(rowNum, 2).setValue(name) // Add name to appropriate cell.
   playersSheet.getRange(rowNum, 3).setValue(rating) // Add rating to appropriate cell.
   updatePlayerRanks() // Re-writes the rank numbers for all players on the list to "fill in the gap" created by the new row.
