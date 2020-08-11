@@ -6,7 +6,7 @@ function log(text){
 }
 
 // Clears the log sheet.
-// Called with the press of a "clear log" button.
+// Called with a press of the "clear log" button.
 function clearLog(){
   var logSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Debugging Log")
   logSheet.getRange("A1").setValue(null)
