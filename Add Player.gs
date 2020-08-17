@@ -88,6 +88,13 @@ function newPlayerSheet(name, rating){
   newSheet.getRange(1, 3).setValue("Rating: " + rating)
   newSheet.getRange(1, 6).setValue("Matches Played: " + 0) // Matches played set to zero since this is a new player.
   
+  // Re-writes the match data on the first line in order to display initial rating on rating history graph.
+  newSheet.getRange(4, 1).setValue(Utilities.formatDate(new Date(), "GMT-5", "MM/dd/yyyy"))
+  newSheet.getRange(4, 2).setValue("INITIAL RATING")
+  newSheet.getRange(4, 5).setValue(rating)
+  newSheet.getRange(4, 6).setValue(rating)
+  newSheet.getRange(4, 7).setValue(rating)
+  
   SpreadsheetApp.setActiveSheet(SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Match Recorder"))
 }
 
