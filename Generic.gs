@@ -19,7 +19,6 @@ function fixPlayerSheetRankValues(){
   var playersSheet = ss.getSheetByName("Active Players")
   var numRows = playersSheet.getMaxRows()
   for (var i = 2; i <= numRows; i++){
-    log(playersSheet.getRange(i, 2).getValue())
     var rankOnSheet = ss.getSheetByName(playersSheet.getRange(i, 2).getValue()).getRange(1, 5).getValue() // Extracts the content of the "rank" cell on the player sheet.
     rankOnSheet = parseInt(rankOnSheet.slice(5, rankOnSheet.length), 10) // Extracts the numerical rank value from the content of the "rank" cell, parsing it to an int
     if (playersSheet.getRange(i, 1).getValue() != rankOnSheet){ // Checks to see if the two rank values match each other.
@@ -54,7 +53,7 @@ function getNamedRangeByName(name){
 // Finds and returns the number of the first row in a particular sheet with a particular value at a particular position.
 function getRowNumByValue(value, pos, sheet){
   for (var i = 1; i <= sheet.getMaxRows(); i++) {
-    if (sheet.getRange(i, pos) == value){
+    if (sheet.getRange(i, pos).getValue() == value){
       return i
     }
   }
@@ -64,13 +63,15 @@ function getRowNumByValue(value, pos, sheet){
 // Finds and returns the number of the first column in a particular sheet with a particular value at a particular position.
 function getColumnNumByValue(value, pos, sheet){
   for (var i = 1; i <= sheet.getMaxColumns(); i++) {
-    if (sheet.getRange(pos, i) == value){
+    if (sheet.getRange(pos, i).getValue() == value){
       return i
     }
   }
   return null
 }
-  
+
+// Called by the "return to main page" button on each player page.
+// Changes active sheet to the "Match Recorder" sheet.
 function returnToMatchRecorder(){
   var ss = SpreadsheetApp.getActiveSpreadsheet()
   ss.setActiveSheet(ss.getSheetByName("Match Recorder"))

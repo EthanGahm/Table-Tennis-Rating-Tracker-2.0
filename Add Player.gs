@@ -49,7 +49,7 @@ function addPlayer(){
   
   // ADD PLAYER TO SYSTEM
   newPlayerSheet(name, rating)  // Once a valid name and rating have been collected, new player is created in the system by
-  addPlayerToList(name, rating) // adding the player to the player list and adding a new player sheet.
+  addToActiveList(name, rating) // adding the player to the player list and adding a new player sheet.
   updateActivePlayerNamesRange() // Ensures that the namedRange called ActivePlayerNames is up to date so that correct options display in drop down menus.
 }
 
@@ -83,7 +83,7 @@ function newPlayerSheet(name, rating){
   newSheet.showSheet() // Ensures that the new sheet is visible.
   
   // Fills in the name, rating, and matches played boxes on the new player sheet.\
-  // Rank box left unfilled for now. Will be filled in later by the addPlayerToList() function.
+  // Rank box left unfilled for now. Will be filled in later by the addToActiveList() function.
   newSheet.getRange(1, 1).setValue(name)
   newSheet.getRange(1, 3).setValue("Rating: " + rating)
   newSheet.getRange(1, 6).setValue("Matches Played: " + 0) // Matches played set to zero since this is a new player.
@@ -99,7 +99,7 @@ function newPlayerSheet(name, rating){
 }
 
 // Adds a player name to the player list in the appropriate spot (sorted by rating).
-function addPlayerToList(name, rating){
+function addToActiveList(name, rating){
   var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players")
   var ratingList = [].concat(...playersSheet.getRange("C2:C").getValues()) // An array of player ratings retrieved from the "Active Players" sheet.
   var rowNum = 0
@@ -116,6 +116,7 @@ function addPlayerToList(name, rating){
   }
   playersSheet.getRange(rowNum, 2).setValue(name) // Add name to appropriate cell.
   playersSheet.getRange(rowNum, 3).setValue(rating) // Add rating to appropriate cell.
+  playersSheet.getRange(rowNum, 4).setValue(0) // Adds the value 0 to the cell denoting the number of matches played (new player hasn't played any matches)
   updatePlayerRanks() // Re-writes the rank numbers for all players on the list to "fill in the gap" created by the new row.
   fixPlayerSheetRankValues() // Ensures that the rank values listed on the "Active Players" sheet match the values recorded on the individual player sheets.
 }
