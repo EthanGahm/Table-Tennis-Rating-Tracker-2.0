@@ -36,7 +36,7 @@ function deletePlayer(){
   } 
     
   deletePlayerSheet(name) // Deletes the personal player sheet of the specified player.
-  deletePlayerFromList(name) // Removes the row containing the name and information of the specified player from the Active Players sheet.
+  deletePlayerFromActiveList(name) // Removes the row containing the name and information of the specified player from the Active Players sheet.
   updateActivePlayerNamesRange() // Ensures that the namedRange called ActivePlayerNames is up to date so that correct options display in drop down menus.
 }
 
@@ -49,7 +49,7 @@ function deletePlayerSheet(name){
 }
 
 // Removes a specified player's row from the players list.
-function deletePlayerFromList(name){
+function deletePlayerFromActiveList(name){
   var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players")
   var playerList = getActivePlayers() // An array of player ratings retrieved from the "Active Players" sheet.
   for (var i = 0; i < playerList.length; i++){ // Iterates through rows in the "Active Players" sheet until the row is found that contains the players name.
@@ -60,13 +60,13 @@ function deletePlayerFromList(name){
   }
   
   updatePlayerRanks() // Re-writes the rank numbers for all players on the list to "fill in the gap" created by deleting the old row.
+  fixPlayerSheetRankValues() // Ensures that the rank values listed on the "Active Players" sheet match the values recorded on the individual player sheets.
 }
 
 // Checks if a certain string is a valid name for a new player.
 // Must appear in the existing list of players.
 function isValidNameToDelete(text){
-  var playerList = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players").getRange("B2:B").getValues()) // An array of player names retrieved from the "Active Players" sheet
-  if (playerList.includes(text)){
+  if (getActivePlayers().includes(text)){
     return true
   }
   return false

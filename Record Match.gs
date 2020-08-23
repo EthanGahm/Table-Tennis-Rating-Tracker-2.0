@@ -43,11 +43,10 @@ function recordMatch(){
 // Players must not be the same as each other, date of match must not be in the future.
 function isValidMatchData(matchData){
   var ui = SpreadsheetApp.getUi()
-  log(matchData[0])
-  if (matchData[1] == matchData[2]){
+  if (matchData[1] == matchData[2]){ // checks to make sure both players are not the same.
     ui.alert("Invalid entry. A player cannot compete against themself.")
     return false
-  } else if (new Date() < matchData[0]) {
+  } else if (new Date() < matchData[0]) { // checks to make sure that the match was not played in the future.
     ui.alert("Invalid entry. You cannot record the result of a match taking place in the future.")
     return false
   }
