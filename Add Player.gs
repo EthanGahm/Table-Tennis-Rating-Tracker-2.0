@@ -56,8 +56,9 @@ function addPlayer(){
 // Checks if a certain string is a valid name for a new player.
 // Must not appear in the existing list of players and must not be an empty string.
 function isValidNameToAdd(text){
-  var playerList = getActivePlayers() // An array of player names retrieved from the "Active Players" sheet
-  if (text != "" && !playerList.includes(text)){
+  var activePlayerList = getActivePlayers() // An array of player names retrieved from the "Active Players" sheet
+  var inactivePlayerList = getInactivePlayers() // An array of player names retrieved from the "Inactive Players" sheet
+  if (text != "" && !activePlayerList.includes(text) && !inactivePlayerList.includes(text)){
     return true
   }
   return false
@@ -98,14 +99,17 @@ function newPlayerSheet(name, rating){
   SpreadsheetApp.setActiveSheet(SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Match Recorder"))
 }
 
-// Adds a player name to the player list in the appropriate spot (sorted by rating).
+// Adds a player name to the active players list in the appropriate spot (sorted by rating).
 function addToActiveList(name, rating){
   var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players")
-  var ratingList = [].concat(...playersSheet.getRange("C2:C").getValues()) // An array of player ratings retrieved from the "Active Players" sheet.
+  var ratingList = getActivePlayerRatings() // An array of player ratings retrieved from the "Active Players" sheet.
   var rowNum = 0
+  log(ratingList.length)
+  log(ratingList[0])
+  
   for (var i = 0; i < ratingList.length; i++) {
     if (rating > ratingList[i]){
-      var rowNum = i + 2 // Because the players start being listed on row number 3, but the list indexes from 0, add 3 to get row number.
+      var rowNum = i + 2 // Because the players start being listed on row number 2, but the list indexes from 0, add 2 to get row number.
       playersSheet.insertRowBefore(rowNum) // Create new row for the player.
       break
     }

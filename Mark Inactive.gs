@@ -1,6 +1,7 @@
 function markInactive(){
   var ui = SpreadsheetApp.getUi()
   var text = ""
+  var name = ""
   var button = ui.Button.OK
   
   // GET NAME
@@ -15,7 +16,7 @@ function markInactive(){
     if (button == ui.Button.OK) {
       // User clicked "OK".
       if (getActivePlayers().includes(text)) {
-        var name = text // If the name entered by the user is valid, name variable is set equal to the input.
+        name = text // If the name entered by the user is valid, name variable is set equal to the input.
       } else {
         ui.alert("There is no currently active player with the name " + text + ".")
       }
@@ -31,7 +32,7 @@ function moveActiveToInactive(name) {
   var ss = SpreadsheetApp.getActiveSpreadsheet()
   var activePlayersSheet = ss.getSheetByName("Active Players")
   setRankInactive(name) // Updates a given player's rank on their player sheet to say "Rank: INACTIVE"
-  var activePlayerData = [].concat(...activePlayersSheet.getRange(getRowNumByValue(name, 2, activePlayersSheet), 1, 1, 4).getValues()) // An array containing the data from the row in the active players sheet corresponding to the player in question
+  var activePlayerData = [].concat(...activePlayersSheet.getRange(getRowNumByValue(name, 2, activePlayersSheet, 2), 1, 1, 4).getValues()) // An array containing the data from the row in the active players sheet corresponding to the player in question
   
   deleteFromActiveList(name) // Removes the row containing the name and information of the specified player from the Active Players sheet.
   updateActivePlayerNamesRange() // Ensures that the namedRange called ActivePlayerNames is up to date so that correct options display in drop down menus.

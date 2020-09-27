@@ -29,7 +29,38 @@ function fixPlayerSheetRankValues(){
 
 // Returns an array containing the names of all active players.
 function getActivePlayers(){
-  return [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players").getRange("B2:B").getValues())
+  var list = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players").getRange("B2:B").getValues())
+  if (list[0] == "" && list.length == 1){
+    return []
+  }
+  return list
+}
+
+// Returns an array containing the names of all inactive players.
+function getInactivePlayers(){
+  var list = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Inactive Players").getRange("A2:A").getValues())
+  if (list[0] == "" && list.length == 1){
+    return []
+  }
+  return list
+}
+
+// Returns an array containing the ratings of all active players
+function getActivePlayerRatings(){
+  var list = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players").getRange("C2:C").getValues())
+  if (list[0] == "" && list.length == 1){
+    return []
+  }
+  return list
+}
+
+// Returns an array containing the ratings of all active players
+function getInactivePlayerRatings(){
+  var list = [].concat(...SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Inactive Players").getRange("B2:B").getValues())
+  if (list[0] == "" && list.length == 1){
+    return []
+  }
+  return list
 }
 
 // Updates the named range within the spreadsheet that contains all of the active player names. Ensures that dropdown menues display correct options.
@@ -51,23 +82,29 @@ function getNamedRangeByName(name){
 }
 
 // Finds and returns the number of the first row in a particular sheet with a particular value at a particular position.
-function getRowNumByValue(value, pos, sheet){
-  for (var i = 1; i <= sheet.getMaxRows(); i++) {
-    if (sheet.getRange(i, pos).getValue() == value){
-      return i
+function getRowNumByValue(value, pos, sheet, startingRow, endingRow){
+  if (arguments.length == 3){
+    for (var i = 1; i <= sheet.getMaxRows(); i++) {
+      if (sheet.getRange(i, pos).getValue() == value){
+        return i
+      }
     }
+    return null
+  } else if (arguments.length == 4) {
+    for (var i = startingRow; i <= sheet.getMaxRows(); i++) {
+      if (sheet.getRange(i, pos).getValue() == value){
+        return i
+      }
   }
   return null
-}
-
-// Finds and returns the number of the first column in a particular sheet with a particular value at a particular position.
-function getColumnNumByValue(value, pos, sheet){
-  for (var i = 1; i <= sheet.getMaxColumns(); i++) {
-    if (sheet.getRange(pos, i).getValue() == value){
-      return i
+  } else if (arguments.length == 5) {
+    for (var i = startingRow - 1; i <= endingRow; i++) {
+      if (sheet.getRange(i, pos).getValue() == value){
+        return i
+      }
     }
+    return null
   }
-  return null
 }
 
 // Called by the "return to main page" button on each player page.
