@@ -51,10 +51,15 @@ function addToInactiveList(activePlayerData){
   var ss = SpreadsheetApp.getActiveSpreadsheet()
   var inactivePlayersSheet = ss.getSheetByName("Inactive Players")
   
+  var name = activePlayerData[1]
+  var rating = activePlayerData[2]
+  var matchesPlayed = activePlayerData[3]
+  
   inactivePlayersSheet.insertRowAfter(inactivePlayersSheet.getMaxRows()) // Creates a new row at the end of the list.
   var rowNum = inactivePlayersSheet.getMaxRows() // The number of the last row in the list. The row that we will be adding to.
-  inactivePlayersSheet.getRange(rowNum, 1).setValue(activePlayerData[1]) // Sets the first cell in this row to the player's name.
-  inactivePlayersSheet.getRange(rowNum, 2).setValue(activePlayerData[2]) // Sets the second cell in this row to the player's rating.
-  inactivePlayersSheet.getRange(rowNum, 3).setValue(activePlayerData[3]) // Sets the third cell in this row to the number of matches the player has played.
+  inactivePlayersSheet.getRange(rowNum, 1).setValue(name) // Sets the first cell in this row to the player's name.
+  inactivePlayersSheet.getRange(rowNum, 2).setValue(rating) // Sets the second cell in this row to the player's rating.
+  inactivePlayersSheet.getRange(rowNum, 3).setValue(matchesPlayed) // Sets the third cell in this row to the number of matches the player has played.
   inactivePlayersSheet.getRange(rowNum, 4).setValue(Utilities.formatDate(new Date(), "GMT-5", "MM/dd/yyyy")) // Sets the fourth cell in this row to the current date (the date they were marked inactive).
+  inactivePlayersSheet.getRange(rowNum, 1).setFormula('=HYPERLINK("#gid=' + SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name).getSheetId() + '", "' + name + '")')
 }
