@@ -100,7 +100,7 @@ function newPlayerSheet(name, rating){
 }
 
 // Adds a player name to the active players list in the appropriate spot (sorted by rating).
-function addToActiveList(name, rating){
+function addToActiveList(name, rating, matchesPlayed = 0){
   var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players")
   var ratingList = getActivePlayerRatings() // An array of player ratings retrieved from the "Active Players" sheet.
   var rowNum = 0
@@ -120,7 +120,7 @@ function addToActiveList(name, rating){
   }
   playersSheet.getRange(rowNum, 2).setValue(name) // Add name to appropriate cell.
   playersSheet.getRange(rowNum, 3).setValue(rating) // Add rating to appropriate cell.
-  playersSheet.getRange(rowNum, 4).setValue(0) // Adds the value 0 to the cell denoting the number of matches played (new player hasn't played any matches)
+  playersSheet.getRange(rowNum, 4).setValue(matchesPlayed) // Adds the value 0 to the cell denoting the number of matches played (new player hasn't played any matches)
   updatePlayerRanks() // Re-writes the rank numbers for all players on the list to "fill in the gap" created by the new row.
   fixPlayerSheetRankValues() // Ensures that the rank values listed on the "Active Players" sheet match the values recorded on the individual player sheets.
 }
