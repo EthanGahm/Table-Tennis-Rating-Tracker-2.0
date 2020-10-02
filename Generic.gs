@@ -113,3 +113,12 @@ function returnToMatchRecorder(){
   var ss = SpreadsheetApp.getActiveSpreadsheet()
   ss.setActiveSheet(ss.getSheetByName("Match Recorder"))
 }
+
+// Sorts the rows in the "Active Players" sheet based on rating. Highest rated players are sorted to the top.
+function sortActivePlayers() { 
+  var ss = SpreadsheetApp.getActiveSpreadsheet()
+  var activePlayersSheet = ss.getSheetByName("Active Players")
+  var columnToSortBy = 3
+  var range = activePlayersSheet.getRange("B2:D" + activePlayersSheet.getMaxRows().toString())
+  range.sort({column: columnToSortBy, ascending: false})
+}

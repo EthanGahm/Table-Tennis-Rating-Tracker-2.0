@@ -28,7 +28,7 @@ function deletePlayer(){
     
   var result = ui.alert( // Checks to make sure the user would really like to delete the player from the system.
     'Are you sure that you would like to delete ' + name + ' from the system?',
-    'This action cannot be undone (without a little bit of annoying work for Ethan).',
+    'Removing players can break things if you are not careful. The "Remove Player" option should be used almost exclusively for when a player was JUST added to the system with an error in their name or initial rating. In nearly all other scenarios, the "Mark Inactive" option should be used instead.',
     ui.ButtonSet.YES_NO);
   
   if (result != ui.Button.YES) { // If the user presses a button other than YES (either NO or the x in the top right), cancels operation.

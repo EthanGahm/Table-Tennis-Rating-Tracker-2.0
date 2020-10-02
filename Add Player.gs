@@ -104,9 +104,7 @@ function addToActiveList(name, rating, matchesPlayed = 0){
   var playersSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Active Players")
   var ratingList = getActivePlayerRatings() // An array of player ratings retrieved from the "Active Players" sheet.
   var rowNum = 0
-  log(ratingList.length)
-  log(ratingList[0])
-  
+
   for (var i = 0; i < ratingList.length; i++) {
     if (rating > ratingList[i]){
       var rowNum = i + 2 // Because the players start being listed on row number 2, but the list indexes from 0, add 2 to get row number.
